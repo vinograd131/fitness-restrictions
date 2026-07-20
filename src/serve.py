@@ -1,9 +1,9 @@
-"""REST-сервис: жалоба -> группа ограничений и рекомендации.
+"""REST-сервис: клиент подаёт жалобу, сервис выдаёт группу ограничений и рекомендации.
 
   GET  /ping /health /groups
   POST /predict  {"text": "..."}
 
-MODEL=transformer (по умолчанию) или MODEL=baseline для запуска без torch.
+По умолчанию MODEL=transformer, для запуска без torch — MODEL=baseline.
 """
 import os
 from contextlib import asynccontextmanager
