@@ -1,9 +1,13 @@
 import json
 from pathlib import Path
 
-from src.mapping import CODES, GROUPS, group_of, is_dropped
+import pytest
+
+from src.mapping import CODES, GROUPS, RESTRICTIONS, group_of, is_dropped
 
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
+
+pytestmark = pytest.mark.needs_data
 
 
 def codes_in_data() -> set[str]:
@@ -36,3 +40,10 @@ def test_known_mappings():
     assert group_of("I11") == "КАРДИО+НЕВРО"
     assert group_of("G20") == "КАРДИО+НЕВРО"
     assert not is_dropped("M54")
+
+
+def test_every_group_has_full_restrictions():
+    for group in GROUPS:
+        rec = RESTRICTIONS[group]
+        assert rec["summary"]
+        assert rec["forbidden"] and rec["caution"] and rec["equipment"]

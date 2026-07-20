@@ -3,11 +3,14 @@ import os
 
 os.environ["MODEL"] = "baseline"
 
+import pytest  # noqa: E402
 from fastapi.testclient import TestClient  # noqa: E402
 
 from src.config import threshold_for  # noqa: E402
 from src.mapping import GROUPS, RESTRICTIONS  # noqa: E402
 from src.serve import app  # noqa: E402
+
+pytestmark = pytest.mark.needs_data
 
 
 def test_ping():
@@ -49,3 +52,12 @@ def test_low_confidence_asks_to_clarify():
     if body["needs_clarification"]:
         assert body["message"]
         assert len(body["alternatives"]) > 1
+
+
+def test_distribution_covers_all_groups():
+    with TestClient(app) as client:
+        body = client.post("/predict", json={"text": "болит колено"}).json()
+    dist = body["distribution"]
+    assert {d["group"] for d in dist} == set(GROUPS)
+    assert abs(sum(d["confidence"] for d in dist) - 1) < 0.01
+    assert dist == sorted(dist, key=lambda d: -d["confidence"])
