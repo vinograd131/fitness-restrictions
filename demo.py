@@ -72,8 +72,18 @@ EXAMPLES = [
 ]
 
 
+MAX_ATTEMPTS = 3
+
+
 def call_api(text: str) -> dict:
     resp = requests.post(f"{API_URL}/predict", json={"text": text}, timeout=90)
+    resp.raise_for_status()
+    return resp.json()
+
+
+@st.cache_data(show_spinner=False)
+def fetch_groups() -> list[dict]:
+    resp = requests.get(f"{API_URL}/groups", timeout=30)
     resp.raise_for_status()
     return resp.json()
 
@@ -114,19 +124,32 @@ with client_col:
         else:
             try:
                 with st.spinner("Отправляю..."):
-                    st.session_state["result"] = call_api(text)
+                    res = call_api(text)
+                st.session_state["result"] = res
+                if res["needs_clarification"]:
+                    st.session_state["attempts"] = st.session_state.get("attempts", 0) + 1
+                else:
+                    st.session_state["attempts"] = 0
             except Exception as exc:
                 st.error(f"Сервис недоступен: {exc}")
     # жалоб нет — модель не запускаем
     if none:
         st.session_state["result"] = {"none": True}
+        st.session_state["attempts"] = 0
 
     result = st.session_state.get("result")
-    # уточнение просим у клиента: жалобу знает он, а не тренер
-    if result and result.get("needs_clarification"):
+    attempts = st.session_state.get("attempts", 0)
+    # после MAX_ATTEMPTS перестаём мучить клиента и отдаём решение тренеру
+    if result and result.get("needs_clarification") and attempts >= MAX_ATTEMPTS:
+        st.markdown(
+            '<div class="sent">Спасибо, этого достаточно. Дальше тренер разберётся сам '
+            "и уточнит при встрече.</div>",
+            unsafe_allow_html=True,
+        )
+    elif result and result.get("needs_clarification"):
         st.markdown(
             '<div class="refine">Опишите жалобу точнее: где именно болит, при каких '
-            "движениях, как давно. Так тренер сможет подобрать безопасную нагрузку.</div>",
+            f"движениях, как давно. Попытка {attempts} из {MAX_ATTEMPTS}.</div>",
             unsafe_allow_html=True,
         )
     elif result:
@@ -151,6 +174,28 @@ with trainer_col:
             "ограничений: разминка, контроль техники, постепенный рост нагрузки.</div>",
             unsafe_allow_html=True,
         )
+    elif data["needs_clarification"] and st.session_state.get("attempts", 0) >= MAX_ATTEMPTS:
+        st.markdown(
+            f'<div class="unsure"><b>Модель не определилась за {MAX_ATTEMPTS} уточнения.</b> '
+            "Ниже — распределение вероятностей по всем группам. Выберите группу сами.</div>",
+            unsafe_allow_html=True,
+        )
+        for alt in data["distribution"]:
+            st.progress(alt["confidence"], text=f'{alt["group"]} — {alt["confidence"]:.0%}')
+
+        groups = [g["group"] for g in fetch_groups()]
+        choice = st.selectbox("Группа ограничений", groups, key="manual_group")
+        rec = next(g for g in fetch_groups() if g["group"] == choice)
+
+        st.markdown(f'<div class="group">{choice}</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="summary">{rec["summary"]}</div>', unsafe_allow_html=True)
+        st.markdown('<div class="sect">Исключить</div>', unsafe_allow_html=True)
+        st.markdown(bullets(rec["forbidden"], "c-forbid"), unsafe_allow_html=True)
+        st.markdown('<div class="sect">С осторожностью</div>', unsafe_allow_html=True)
+        st.markdown(bullets(rec["caution"], "c-caution"), unsafe_allow_html=True)
+        st.markdown('<div class="sect">Тренажёры и снаряды</div>', unsafe_allow_html=True)
+        st.markdown(bullets(rec["equipment"], "c-equip"), unsafe_allow_html=True)
+        st.caption("Выбор тренера — будущая разметка для дообучения модели.")
     elif data["needs_clarification"]:
         st.markdown(
             f'<div class="unsure"><b>Модель не уверена ({data["confidence"]:.0%}).</b> '

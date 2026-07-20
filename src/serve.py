@@ -66,6 +66,7 @@ class Prediction(BaseModel):
     needs_clarification: bool
     message: str | None = None
     alternatives: list[Candidate] = []
+    distribution: list[Candidate] = []
     disclaimer: str = DISCLAIMER
 
 
@@ -95,12 +96,11 @@ def predict(item: Complaint):
 
     # ниже порога не настаиваем на ответе, а просим уточнить жалобу
     uncertain = confidence < threshold_for(clf.name)
-    alternatives = []
-    if uncertain:
-        top = sorted(range(len(proba)), key=lambda i: proba[i], reverse=True)[:TOP_K]
-        alternatives = [
-            Candidate(group=clf.classes[i], confidence=round(float(proba[i]), 4)) for i in top
-        ]
+    order = sorted(range(len(proba)), key=lambda i: proba[i], reverse=True)
+    distribution = [
+        Candidate(group=clf.classes[i], confidence=round(float(proba[i]), 4)) for i in order
+    ]
+    alternatives = distribution[:TOP_K] if uncertain else []
 
     return Prediction(
         group=group,
@@ -112,4 +112,5 @@ def predict(item: Complaint):
         needs_clarification=uncertain,
         message=CLARIFY_MESSAGE if uncertain else None,
         alternatives=alternatives,
+        distribution=distribution,
     )

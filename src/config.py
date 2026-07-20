@@ -24,6 +24,9 @@ CONFIDENCE_THRESHOLD: dict[str, float] = {
 DEFAULT_THRESHOLD = 0.90
 TOP_K = 3
 
+# сколько раз просим уточнить жалобу, прежде чем отдать решение тренеру
+MAX_CLARIFY_ATTEMPTS = 3
+
 
 def threshold_for(model_name: str) -> float:
     return CONFIDENCE_THRESHOLD.get(model_name, DEFAULT_THRESHOLD)
