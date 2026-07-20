@@ -20,6 +20,7 @@ from ..evaluation.metrics import (
     scores,
 )
 from ..mapping import GROUPS
+from .base import BaseClassifier
 
 NAME = "fasttext"
 SEED = 42
@@ -54,6 +55,24 @@ def doc_vectors(model: FastText, docs: list[list[str]]) -> np.ndarray:
         if vecs:
             out[i] = np.mean(vecs, axis=0)
     return out
+
+
+class FastTextClassifier(BaseClassifier):
+    """субсловные эмбеддинги + LogReg, модели читаются из models/."""
+
+    name = NAME
+
+    def __init__(self) -> None:
+        self._ft = FastText.load(str(MODELS / f"{NAME}.model"))
+        self._clf = joblib.load(MODELS / f"{NAME}_clf.joblib")
+
+    def predict_proba(self, texts: list[str]) -> np.ndarray:
+        tokens = [tokenize(t) for t in texts]
+        return self._clf.predict_proba(doc_vectors(self._ft, tokens))
+
+    @property
+    def classes(self) -> list[str]:
+        return list(self._clf.classes_)
 
 
 def main(eval_split: str = "dev") -> None:

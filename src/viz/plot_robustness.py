@@ -5,7 +5,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from ..config import REPORTS_DIR as REPORTS
-MODELS = {"baseline": "tf-idf + LogReg", "rubioroberta_ft": "RuBioRoBERTa\nфайнтюн"}
+MODELS = {
+    "baseline": "tf-idf + LogReg",
+    "fasttext": "fastText",
+    "catboost": "CatBoost",
+    "rubioroberta_ft": "RuBioRoBERTa\nфайнтюн",
+}
 
 
 def main() -> None:
@@ -16,7 +21,7 @@ def main() -> None:
 
     x = np.arange(len(names))
     width = 0.38
-    fig, ax = plt.subplots(figsize=(8, 5.5))
+    fig, ax = plt.subplots(figsize=(9.5, 5.5))
     b1 = ax.bar(x - width / 2, orig, width, label="оригинальный test", color="#3b5bdb")
     ax.bar(x + width / 2, para, width, label="перефраз (свободная речь)", color="#e8590c")
 

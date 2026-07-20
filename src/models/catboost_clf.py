@@ -1,6 +1,7 @@
 """CatBoost поверх fastText-эмбеддингов документов."""
 import argparse
 
+import numpy as np
 from catboost import CatBoostClassifier
 from gensim.models import FastText
 
@@ -16,6 +17,7 @@ from ..evaluation.metrics import (
     save_report,
     scores,
 )
+from .base import BaseClassifier
 from .fasttext_clf import doc_vectors, tokenize, train_embeddings
 from ..mapping import GROUPS
 
@@ -28,6 +30,25 @@ def load_or_train_embeddings(train_tokens: list[list[str]]) -> FastText:
     if path.exists():
         return FastText.load(str(path))
     return train_embeddings(train_tokens)
+
+
+class CatBoostGroupClassifier(BaseClassifier):
+    """CatBoost поверх fastText-эмбеддингов, модели читаются из models/."""
+
+    name = NAME
+
+    def __init__(self) -> None:
+        self._ft = FastText.load(str(MODELS / "fasttext.model"))
+        self._clf = CatBoostClassifier()
+        self._clf.load_model(str(MODELS / f"{NAME}.cbm"))
+
+    def predict_proba(self, texts: list[str]) -> np.ndarray:
+        tokens = [tokenize(t) for t in texts]
+        return self._clf.predict_proba(doc_vectors(self._ft, tokens))
+
+    @property
+    def classes(self) -> list[str]:
+        return list(self._clf.classes_)
 
 
 def main(eval_split: str = "dev") -> None:

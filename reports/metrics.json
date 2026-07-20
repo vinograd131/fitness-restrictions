@@ -26,6 +26,11 @@
       "accuracy": 0.8433,
       "macro_f1": 0.8322,
       "pr_auc": 0.8924
+    },
+    "test_para": {
+      "accuracy": 0.6393,
+      "macro_f1": 0.5712,
+      "pr_auc": 0.6255
     }
   },
   "catboost": {
@@ -38,6 +43,11 @@
       "accuracy": 0.852,
       "macro_f1": 0.8429,
       "pr_auc": 0.9023
+    },
+    "test_para": {
+      "accuracy": 0.6281,
+      "macro_f1": 0.5905,
+      "pr_auc": 0.6839
     }
   },
   "rubioroberta_frozen_mlp": {
