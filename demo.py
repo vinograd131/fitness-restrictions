@@ -140,16 +140,10 @@ with client_col:
     result = st.session_state.get("result")
     attempts = st.session_state.get("attempts", 0)
     # после MAX_ATTEMPTS перестаём мучить клиента и отдаём решение тренеру
-    if result and result.get("needs_clarification") and attempts >= MAX_ATTEMPTS:
-        st.markdown(
-            '<div class="sent">Спасибо, этого достаточно. Дальше тренер разберётся сам '
-            "и уточнит при встрече.</div>",
-            unsafe_allow_html=True,
-        )
-    elif result and result.get("needs_clarification"):
+    if result and result.get("needs_clarification") and attempts < MAX_ATTEMPTS:
         st.markdown(
             '<div class="refine">Опишите жалобу точнее: где именно болит, при каких '
-            f"движениях, как давно. Попытка {attempts} из {MAX_ATTEMPTS}.</div>",
+            "движениях, как давно. Так тренер сможет подобрать безопасную нагрузку.</div>",
             unsafe_allow_html=True,
         )
     elif result:
