@@ -1,0 +1,28 @@
+{
+  "baseline": {
+    "model": "baseline",
+    "split": "test",
+    "clean_macro_f1": 0.8683,
+    "n_seeds": 3,
+    "levels": [
+      {
+        "rate": 0.05,
+        "macro_f1": 0.864,
+        "std": 0.0055,
+        "drop": -0.0043
+      },
+      {
+        "rate": 0.1,
+        "macro_f1": 0.8515,
+        "std": 0.0046,
+        "drop": -0.0168
+      },
+      {
+        "rate": 0.2,
+        "macro_f1": 0.8503,
+        "std": 0.0108,
+        "drop": -0.018
+      }
+    ]
+  }
+}

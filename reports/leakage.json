@@ -1,0 +1,25 @@
+{
+  "split": "test",
+  "full_macro_f1": 0.8683,
+  "median_similarity": 0.3403,
+  "filtered": [
+    {
+      "threshold": 0.9,
+      "n": 798,
+      "macro_f1": 0.8678,
+      "delta": -0.0005
+    },
+    {
+      "threshold": 0.8,
+      "n": 759,
+      "macro_f1": 0.8637,
+      "delta": -0.0046
+    },
+    {
+      "threshold": 0.7,
+      "n": 713,
+      "macro_f1": 0.8581,
+      "delta": -0.0102
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+.venv/
+__pycache__/
+*.pyc
+.idea/
+.ipynb_checkpoints/
+.pytest_cache/
+.ruff_cache/
+.claude/
+
+/outputs/
+/catboost_info/
+
+# из моделей коммичу только LoRA-адаптер, он нужен сервису
+/models/*
+!/models/rubioroberta_ft/
+
+# датасет не перевыкладываю, см. data/README.md
+/data/*.jsonl
+
+PLAN.md
+PRESENTATION.md
+ОПИСАНИЕ_ПРОЕКТА.md

@@ -1,0 +1,109 @@
+{
+  "model": "rubioroberta_ft",
+  "split": "dev",
+  "temperature": 1.375,
+  "before": {
+    "ece": 0.0579,
+    "mean_confidence": 0.91,
+    "accuracy": 0.8542,
+    "bins": [
+      {
+        "bin": "0.3-0.4",
+        "confidence": 0.3538,
+        "accuracy": 0.5,
+        "share": 0.0072
+      },
+      {
+        "bin": "0.4-0.5",
+        "confidence": 0.4814,
+        "accuracy": 0.375,
+        "share": 0.0096
+      },
+      {
+        "bin": "0.5-0.6",
+        "confidence": 0.5482,
+        "accuracy": 0.4043,
+        "share": 0.0562
+      },
+      {
+        "bin": "0.6-0.7",
+        "confidence": 0.6465,
+        "accuracy": 0.3636,
+        "share": 0.0394
+      },
+      {
+        "bin": "0.7-0.8",
+        "confidence": 0.7548,
+        "accuracy": 0.6458,
+        "share": 0.0573
+      },
+      {
+        "bin": "0.8-0.9",
+        "confidence": 0.8544,
+        "accuracy": 0.8154,
+        "share": 0.0777
+      },
+      {
+        "bin": "0.9-1.0",
+        "confidence": 0.9791,
+        "accuracy": 0.9429,
+        "share": 0.7527
+      }
+    ]
+  },
+  "after": {
+    "ece": 0.0263,
+    "mean_confidence": 0.8587,
+    "accuracy": 0.8542,
+    "bins": [
+      {
+        "bin": "0.2-0.3",
+        "confidence": 0.2652,
+        "accuracy": 0.0,
+        "share": 0.0012
+      },
+      {
+        "bin": "0.3-0.4",
+        "confidence": 0.3402,
+        "accuracy": 0.375,
+        "share": 0.0096
+      },
+      {
+        "bin": "0.4-0.5",
+        "confidence": 0.4603,
+        "accuracy": 0.3333,
+        "share": 0.0394
+      },
+      {
+        "bin": "0.5-0.6",
+        "confidence": 0.5447,
+        "accuracy": 0.44,
+        "share": 0.0597
+      },
+      {
+        "bin": "0.6-0.7",
+        "confidence": 0.651,
+        "accuracy": 0.6727,
+        "share": 0.0657
+      },
+      {
+        "bin": "0.7-0.8",
+        "confidence": 0.7611,
+        "accuracy": 0.8088,
+        "share": 0.0812
+      },
+      {
+        "bin": "0.8-0.9",
+        "confidence": 0.8553,
+        "accuracy": 0.8321,
+        "share": 0.1637
+      },
+      {
+        "bin": "0.9-1.0",
+        "confidence": 0.9661,
+        "accuracy": 0.9753,
+        "share": 0.5795
+      }
+    ]
+  }
+}

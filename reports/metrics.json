@@ -1,0 +1,70 @@
+{
+  "baseline": {
+    "dev": {
+      "accuracy": 0.8638,
+      "macro_f1": 0.8542,
+      "pr_auc": 0.9286
+    },
+    "test": {
+      "accuracy": 0.8731,
+      "macro_f1": 0.8683,
+      "pr_auc": 0.9061
+    },
+    "test_para": {
+      "accuracy": 0.6903,
+      "macro_f1": 0.6533,
+      "pr_auc": 0.698
+    }
+  },
+  "fasttext": {
+    "dev": {
+      "accuracy": 0.8327,
+      "macro_f1": 0.8211,
+      "pr_auc": 0.8929
+    },
+    "test": {
+      "accuracy": 0.8433,
+      "macro_f1": 0.8322,
+      "pr_auc": 0.8924
+    }
+  },
+  "catboost": {
+    "dev": {
+      "accuracy": 0.8411,
+      "macro_f1": 0.8329,
+      "pr_auc": 0.9018
+    },
+    "test": {
+      "accuracy": 0.852,
+      "macro_f1": 0.8429,
+      "pr_auc": 0.9023
+    }
+  },
+  "rubioroberta_frozen_mlp": {
+    "dev": {
+      "accuracy": 0.811,
+      "macro_f1": 0.815
+    },
+    "test": {
+      "accuracy": 0.836,
+      "macro_f1": 0.8204,
+      "pr_auc": 0.873
+    }
+  },
+  "rubioroberta_ft": {
+    "dev": {
+      "accuracy": 0.8534,
+      "macro_f1": 0.854
+    },
+    "test": {
+      "accuracy": 0.8696,
+      "macro_f1": 0.8653,
+      "pr_auc": 0.9209
+    },
+    "test_para": {
+      "accuracy": 0.795,
+      "macro_f1": 0.7737,
+      "pr_auc": 0.8476
+    }
+  }
+}

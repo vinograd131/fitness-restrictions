@@ -1,0 +1,18 @@
+services:
+  api:
+    build: .
+    image: anamnes
+    ports:
+      - "8000:8000"
+    environment:
+      MODEL: transformer
+
+  ui:
+    image: anamnes
+    depends_on:
+      - api
+    ports:
+      - "8501:8501"
+    environment:
+      API_URL: http://api:8000
+    command: streamlit run demo.py --server.port 8501 --server.address 0.0.0.0
